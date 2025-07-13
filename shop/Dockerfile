@@ -1,0 +1,8 @@
+FROM maven:3.9.6-eclipse-temurin-21 AS build
+COPY . .
+RUN mvn clean package -DskipTests
+
+FROM eclipse-temurin:24-jdk-slim
+COPY --from=build /target/shop-0.0.1-SNAPSHOT.jar shop.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","shop.jar"]
